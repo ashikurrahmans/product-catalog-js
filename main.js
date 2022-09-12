@@ -3,6 +3,7 @@ const productPrice = document.getElementById("productPrice");
 const submitForm = document.querySelector("form");
 const forError = document.getElementById("forError");
 const itemsElm = document.getElementById("items");
+const search = document.querySelector("#filter");
 
 let products = [];
 submitForm.addEventListener("submit", (e) => {
@@ -20,7 +21,7 @@ submitForm.addEventListener("submit", (e) => {
 
     products.push({
       id: id,
-      product: productNameValue,
+      name: productNameValue,
       price: productPriceValue,
     });
     // Adding Item to the UI
@@ -37,6 +38,34 @@ itemsElm.addEventListener("click", (e) => {
     const restOfThePd = products.filter((product) => product.id !== id);
     products = restOfThePd;
   }
+});
+
+search.addEventListener("keyup", (e) => {
+  const value = e.target.value;
+  const filterdProduct = products.filter((product) =>
+    product.name.includes(value)
+  );
+
+  filterdProduct.forEach((product) => {
+    const id = product.id;
+    itemsElm.innerHTML = "";
+    const listElement = `     
+  <li class="item-${id} rounded shadow-lg py-4 px-4 border-2 border-gray-100 my-1">
+            <div class="flex justify-between">
+              <div class="flex">
+                <h2 class="text-bold">${product.name}</h2>
+                <h2 class="ml-2">$${product.price}</h2>
+              </div>
+
+              <div>
+                <i class="fa-sharp fa-solid fa-trash delete-item"></i>
+              </div>
+            </div>
+          </li>
+    `;
+
+    itemsElm.insertAdjacentHTML("afterbegin", listElement);
+  });
 });
 
 const productId = (elm) => {
