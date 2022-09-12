@@ -1,55 +1,56 @@
-const productName = document.getElementById("productName");
-const productPrice = document.getElementById("productPrice");
-const submitForm = document.querySelector("form");
-const forError = document.getElementById("forError");
-const itemsElm = document.getElementById("items");
-const search = document.querySelector("#filter");
+(function () {
+  const productName = document.getElementById("productName");
+  const productPrice = document.getElementById("productPrice");
+  const submitForm = document.querySelector("form");
+  const forError = document.getElementById("forError");
+  const itemsElm = document.getElementById("items");
+  const search = document.querySelector("#filter");
 
-let products = [];
-submitForm.addEventListener("submit", (e) => {
-  e.preventDefault();
+  let products = [];
+  submitForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  const { productNameValue, productPriceValue } = getUserValue();
+    const { productNameValue, productPriceValue } = getUserValue();
 
-  // User Data Validation
-  const error = userDataValidation(productNameValue, productNameValue);
-  // reseting form data
-  resetFormData();
-  const id = products.length;
-  if (!error) {
-    // Adding Data to source
+    // User Data Validation
+    const error = userDataValidation(productNameValue, productNameValue);
+    // reseting form data
+    resetFormData();
+    const id = products.length;
+    if (!error) {
+      // Adding Data to source
 
-    products.push({
-      id: id,
-      name: productNameValue,
-      price: productPriceValue,
-    });
-    // Adding Item to the UI
-    addingItemToTheUI(id, productNameValue, productPriceValue);
-  }
-});
+      products.push({
+        id: id,
+        name: productNameValue,
+        price: productPriceValue,
+      });
+      // Adding Item to the UI
+      addingItemToTheUI(id, productNameValue, productPriceValue);
+    }
+  });
 
-itemsElm.addEventListener("click", (e) => {
-  if (e.target.classList.contains("delete-item")) {
-    const id = productId(e.target);
-    // Remove from ui
-    document.querySelector(`.item-${id}`).remove();
-    // Remove from array
-    const restOfThePd = products.filter((product) => product.id !== id);
-    products = restOfThePd;
-  }
-});
+  itemsElm.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-item")) {
+      const id = productId(e.target);
+      // Remove from ui
+      document.querySelector(`.item-${id}`).remove();
+      // Remove from array
+      const restOfThePd = products.filter((product) => product.id !== id);
+      products = restOfThePd;
+    }
+  });
 
-search.addEventListener("keyup", (e) => {
-  const value = e.target.value;
-  const filterdProduct = products.filter((product) =>
-    product.name.includes(value)
-  );
+  search.addEventListener("keyup", (e) => {
+    const value = e.target.value;
+    const filterdProduct = products.filter((product) =>
+      product.name.includes(value)
+    );
 
-  filterdProduct.forEach((product) => {
-    const id = product.id;
-    itemsElm.innerHTML = "";
-    const listElement = `     
+    filterdProduct.forEach((product) => {
+      const id = product.id;
+      itemsElm.innerHTML = "";
+      const listElement = `     
   <li class="item-${id} rounded shadow-lg py-4 px-4 border-2 border-gray-100 my-1">
             <div class="flex justify-between">
               <div class="flex">
@@ -64,42 +65,42 @@ search.addEventListener("keyup", (e) => {
           </li>
     `;
 
-    itemsElm.insertAdjacentHTML("afterbegin", listElement);
+      itemsElm.insertAdjacentHTML("afterbegin", listElement);
+    });
   });
-});
 
-const productId = (elm) => {
-  const pelm = elm.parentElement.parentElement.parentElement;
-  return Number(pelm.classList[0].split("-")[1]);
-};
+  const productId = (elm) => {
+    const pelm = elm.parentElement.parentElement.parentElement;
+    return Number(pelm.classList[0].split("-")[1]);
+  };
 
-const getUserValue = () => {
-  const productNameValue = productName.value;
-  const productPriceValue = productPrice.value;
-  return { productNameValue, productPriceValue };
-};
+  const getUserValue = () => {
+    const productNameValue = productName.value;
+    const productPriceValue = productPrice.value;
+    return { productNameValue, productPriceValue };
+  };
 
-const userDataValidation = (nameValue, priceValue) => {
-  let error = false;
-  if (nameValue.length < 4) {
-    alert("Product name should be more then 4 charecter");
-    error = true;
-    if (priceValue <= 0) {
-      alert("Invalid Price");
+  const userDataValidation = (nameValue, priceValue) => {
+    let error = false;
+    if (nameValue.length < 4) {
+      alert("Product name should be more then 4 charecter");
       error = true;
+      if (priceValue <= 0) {
+        alert("Invalid Price");
+        error = true;
+      }
+
+      return error;
     }
+  };
 
-    return error;
-  }
-};
+  const resetFormData = () => {
+    productName.value = "";
+    productPrice.value = "";
+  };
 
-const resetFormData = () => {
-  productName.value = "";
-  productPrice.value = "";
-};
-
-const addingItemToTheUI = (id, pdName, pdPrice) => {
-  const listElement = `
+  const addingItemToTheUI = (id, pdName, pdPrice) => {
+    const listElement = `
   <li class="item-${id} rounded shadow-lg py-4 px-4 border-2 border-gray-100 my-1">
             <div class="flex justify-between">
               <div class="flex">
@@ -114,5 +115,6 @@ const addingItemToTheUI = (id, pdName, pdPrice) => {
           </li>
     `;
 
-  itemsElm.insertAdjacentHTML("afterbegin", listElement);
-};
+    itemsElm.insertAdjacentHTML("afterbegin", listElement);
+  };
+})();
