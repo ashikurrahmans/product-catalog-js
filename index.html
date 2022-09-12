@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <title>Product Catalog Pure Javascript App</title>
+  </head>
+  <body>
+    <div class="p-6 rounded-lg shadow-lg bg-white max-w-lg mx-auto mt-4 py-10">
+      <div class="bg-black my-6 px-4 py-4">
+        <h1
+          class="text-lg text-center text-white text-bold text-2xl rounded mb-3"
+        >
+          Product Catalog
+        </h1>
+        <div class="form-group mb-6">
+          <input
+            type="text"
+            class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            aria-describedby="emailHelp"
+            placeholder="Search Your Product"
+          />
+        </div>
+      </div>
+      <form>
+        <div class="form-group mb-6" id="forError">
+          <div class="flex">
+            <input
+              type="text"
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none mr-3"
+              id="productName"
+              placeholder="Product Name"
+            />
+            <input
+              type="number"
+              class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              id="productPrice"
+              placeholder="Price"
+            />
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+        >
+          Submit
+        </button>
+      </form>
+      <div class="my-4">
+        <ul id="items"></ul>
+      </div>
+    </div>
+
+    <script src="/main.js"></script>
+  </body>
+</html>
