@@ -5,8 +5,12 @@
   const forError = document.getElementById("forError");
   const itemsElm = document.getElementById("items");
   const search = document.querySelector("#filter");
+  const addProudctButton = document.querySelector(".add-product");
+  const updateButton = document.querySelector(".update-button");
 
   let products = [];
+
+  let updatedItemID;
 
   // Form Data Collect
   submitForm.addEventListener("submit", (e) => {
@@ -36,17 +40,62 @@
   // Delete Item from UI
   itemsElm.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete-item")) {
-      const id = productId(e.target);
+      updatedItemID = productId(e.target);
       // Remove from ui
-      document.querySelector(`.item-${id}`).remove();
+      document.querySelector(`.item-${updatedItemID}`).remove();
       // Remove from array
-      const restOfThePd = products.filter((product) => product.id !== id);
+      const restOfThePd = products.filter(
+        (product) => product.id !== updatedItemID
+      );
       products = restOfThePd;
 
       // Remove from LocalStorage
-      removeFromStorage(id);
+      removeFromStorage(updatedItemID);
+    } else if (e.target.classList.contains("edit-item")) {
+      updatedItemID = productId(e.target);
+      const foundpd = products.find((product) => product.id === updatedItemID);
+      populateUiToState(foundpd);
+      if (!document.querySelector(".update-button")) {
+        showUpdateButton();
+      }
+
+      // Update button click
+      updateButton.addEventListener("click", (e) => {
+        if (e.target.classList.contains("edit-item")) {
+          const { productNameValue, productPriceValue } = getUserValue();
+          products = products.map((product) => {
+            if (product.id === updatedItemID) {
+              return {
+                id: product.id,
+                name: productNameValue,
+                price: productPriceValue,
+              };
+            } else {
+              return product;
+            }
+          });
+        }
+        resetFormData();
+        addingItemsUI(products);
+      });
     }
   });
+
+  // SHowing update button
+  const showUpdateButton = () => {
+    const buttonElm = ` <button
+        type="button"
+        class="update-button px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+      >
+        Update
+      </button>`;
+    addProudctButton.style.display = "none";
+    submitForm.insertAdjacentHTML("beforeend", buttonElm);
+  };
+  const populateUiToState = (product) => {
+    productName.value = product.name;
+    productPrice.value = product.price;
+  };
 
   search.addEventListener("keyup", (e) => {
     const value = e.target.value;
@@ -59,6 +108,7 @@
     });
   });
 
+  // Adding items to the ui
   const addingItemsUI = (product) => {
     itemsElm.innerHTML = "";
     {
@@ -72,7 +122,9 @@
              </div>
 
              <div>
-               <i class="fa-sharp fa-solid fa-trash delete-item"></i>
+               <i class="fa-sharp fa-solid fa-trash delete-item mr-4 cursor-pointer"></i>
+               <i class="update-icon fa-solid fa-pen-to-square ml-4 edit-item cursor-pointer"></i>
+
              </div>
            </div>
          </li>
@@ -82,17 +134,19 @@
     }
   };
 
+  // Getting the ID from class
   const productId = (elm) => {
     const pelm = elm.parentElement.parentElement.parentElement;
     return Number(pelm.classList[0].split("-")[1]);
   };
-
+  // Getting the form value
   const getUserValue = () => {
     const productNameValue = productName.value;
     const productPriceValue = productPrice.value;
     return { productNameValue, productPriceValue };
   };
 
+  // Validate the user data
   const userDataValidation = (nameValue, priceValue) => {
     let error = false;
     if (nameValue.length < 4) {
@@ -107,11 +161,13 @@
     }
   };
 
+  // Reset form data
   const resetFormData = () => {
     productName.value = "";
     productPrice.value = "";
   };
 
+  // Adding Item to the ui
   const addingItemToTheUI = (id, pdName, pdPrice) => {
     const listElement = `
   <li class="item-${id} rounded shadow-lg py-4 px-4 border-2 border-gray-100 my-1">
@@ -122,8 +178,9 @@
               </div>
 
               <div>
-                <i class="fa-sharp fa-solid fa-trash delete-item"></i>
-              </div>
+                <i class="fa-sharp fa-solid fa-trash delete-item cursor-pointer mr-4"></i>
+                <i class="update-icon fa-solid fa-pen-to-square ml-4 cursor-pointer"></i>
+                </div>
             </div>
           </li>
     `;
@@ -148,7 +205,7 @@
   // Load All Prouduct After page reload
   document.addEventListener("DOMContentLoaded", (e) => {
     if (localStorage.getItem("allproducts")) {
-      const products = JSON.parse(localStorage.getItem("allproducts"));
+      products = JSON.parse(localStorage.getItem("allproducts"));
       addingItemsUI(products);
     }
   });
